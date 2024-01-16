@@ -1,4 +1,5 @@
 from ..enums.column_types import ColumnTypes
+from ..models.column_ref import ColumnRef
 
 class Column:
     def __init__(
@@ -35,25 +36,23 @@ class Column:
 class RelationalColumn:
     def __init__(
         self,
-        column: Column,
+        column: ColumnRef,
         name: str,
-        table_ref: str,
         on_delete: str | None = None,
         on_update: str | None = None,
         primary_key=False,
         default: str | None = None,
     ) -> None:
-        self.column = column
+        self.column_ref = column
         self.name = name
         self.on_delete = on_delete
         self.on_update = on_update
         self.primary_key = primary_key
         self.default = default
-        self.table_ref = table_ref
         self.auto_increment = False
 
     def create_column_query(self) -> str:
-        return f'{self.name} {self.column.type.value}{self.__length__()} {self.__primary_key__()} {self.__default__()}'
+        return f'{self.name} {self.column_ref.column.type.value}{self.__length__()} {self.__primary_key__()} {self.__default__()}'
 
     def __primary_key__(self) -> str:
         return 'PRIMARY KEY' if self.primary_key else ''
@@ -62,7 +61,7 @@ class RelationalColumn:
         return f'DEFAULT {self.default}' if self.default else ''
     
     def __foreign_key__(self) -> str:
-        return f'FOREIGN KEY ({self.name}) REFERENCES {self.table_ref} ({self.column.name}) {self.__on_delete__()} {self.__on_update__()}'
+        return f'FOREIGN KEY ({self.name}) REFERENCES {self.column_ref.table} ({self.column_ref.column.name}) {self.__on_delete__()} {self.__on_update__()}'
     
     def __on_delete__(self) -> str:
         return f'ON DELETE {self.on_delete}' if self.on_delete else ''
@@ -71,7 +70,7 @@ class RelationalColumn:
         return f'ON UPDATE {self.on_update}' if self.on_update else ''
     
     def __length__(self) -> str:
-        return f'({self.column.length})' if self.column.length else ''
+        return f'({self.column_ref.column.length})' if self.column_ref.column.length else ''
 
     def create_foreign_key_query(self) -> str:
         return self.__foreign_key__()

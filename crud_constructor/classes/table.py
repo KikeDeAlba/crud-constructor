@@ -1,5 +1,6 @@
 from .column import Column, RelationalColumn
 from mysqlclientpy import DB
+from ..models.column_ref import ColumnRef
 
 class Table:
     def __init__(
@@ -9,6 +10,18 @@ class Table:
     ) -> None:
         self.name = name
         self.columns = columns
+
+        self.column_ref: dict[str, Column] = {}
+
+        for column in self.columns:
+            if isinstance(column, Column):
+                self.column_ref[column.name] = column
+
+    def get_column(self, name: str) -> ColumnRef:
+        return ColumnRef(
+            column=self.column_ref[name],
+            table=self.name
+        )
 
     def __set_client_sql__(self, client: DB) -> None:
         self.client_sql = client
