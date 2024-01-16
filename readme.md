@@ -104,6 +104,5 @@ Estas clases definen columnas simples y columnas relacionales, respectivamente. 
 ## Notas
 - Este proyecto está en desarrollo y se agregarán nuevas características.
 - La generación de HTML para el CRUD es una característica planificada (ver `__html__` en `Crud`).
-- Asegúrate de tener el paquete `mysqlclientpy` instalado y configurado correctamente.
 
 ¡Gracias por usar `crud-constructor`! Si encuentras algún problema o tienes sugerencias, no dudes en abrir un issue en el repositorio. ¡Contribuciones son bienvenidas!
