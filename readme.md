@@ -30,20 +30,17 @@ Ejemplo de uso:
 # users.py
 from crud_constructor import Table, Column, ColumnTypes
 
-# Definir columnas relacionales
-user_id_col = Column(
-    name='id',
-    default='UUID_TO_BIN(UUID())',
-    type=ColumnTypes.BINARY,
-    length=16,
-    primary_key=True
-)
-
 # Crear la tabla
 users_table = Table(
     name='users',
     columns=[
-        user_id_col,
+        Column(
+            name='id',
+            default='UUID_TO_BIN(UUID())',
+            type=ColumnTypes.BINARY,
+            length=16,
+            primary_key=True
+        ),
         Column(
             name='name',
             type=ColumnTypes.VARCHAR,
@@ -61,7 +58,7 @@ users_table = Table(
 ```python
 # orders.py
 from crud_constructor import RelationalColumn, Table, Column, ColumnTypes
-from users import user_id_col
+from users import users_table
 
 # Relacion de columnas
 orders_table = Table(
@@ -74,9 +71,8 @@ orders_table = Table(
             primary_key=True
         ),
         RelationalColumn(
-            column=user_id_col,
-            name='user_id',
-            table_ref='users'
+            column=users_table.get_column('id'),
+            name='user_id'
         ),
         Column(
             name='price',
