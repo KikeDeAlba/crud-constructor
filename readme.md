@@ -27,6 +27,7 @@ La clase `Table` representa una tabla en la base de datos y define sus columnas.
 Ejemplo de uso:
 - Column
 ```python
+# users.py
 from crud_constructor import Table, Column, ColumnTypes
 
 # Definir columnas relacionales
@@ -58,7 +59,9 @@ users_table = Table(
 ```
 - Relational Column
 ```python
-from crud_constructor import RelationalColumn
+# orders.py
+from crud_constructor import RelationalColumn, Table, Column, ColumnTypes
+from users import user_id_col
 
 # Relacion de columnas
 orders_table = Table(
