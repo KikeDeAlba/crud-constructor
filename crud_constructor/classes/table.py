@@ -22,8 +22,6 @@ class Table:
 
         for column in self.columns:
             if isinstance(column, RelationalColumn):
-                column.set_table_name(self.name)
-
                 ref = column.create_foreign_key_query()
 
                 table_sql += f', {ref}'

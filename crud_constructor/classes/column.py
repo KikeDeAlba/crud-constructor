@@ -27,6 +27,7 @@ class RelationalColumn:
         self,
         column: Column,
         name: str,
+        table_ref: str,
         on_delete: str | None = None,
         on_update: str | None = None,
         primary_key=False,
@@ -39,6 +40,7 @@ class RelationalColumn:
         self.on_update = on_update
         self.primary_key = primary_key
         self.default = default
+        self.table_ref = table_ref
 
     def create_column_query(self) -> str:
         return f'{self.name} {self.column.type.value} {self.__primary_key__()} {self.__default__()}'
@@ -49,11 +51,8 @@ class RelationalColumn:
     def __default__(self) -> str:
         return f'DEFAULT {self.default}' if self.default else ''
     
-    def set_table_name(self, table_name: str) -> None:
-        self.table_name = table_name
-    
     def __foreign_key__(self) -> str:
-        return f'FOREIGN KEY ({self.name}) REFERENCES {self.table_name} ({self.column.name}) {self.__on_delete__()} {self.__on_update__()}'
+        return f'FOREIGN KEY ({self.name}) REFERENCES {self.table_ref} ({self.column.name}) {self.__on_delete__()} {self.__on_update__()}'
     
     def __on_delete__(self) -> str:
         return f'ON DELETE {self.on_delete}' if self.on_delete else ''

@@ -25,18 +25,30 @@ crud = Crud(tables=[table1, table2], client_sql=DB(...))
 La clase `Table` representa una tabla en la base de datos y define sus columnas. Cada tabla se asocia con un objeto `DB` que actúa como el cliente SQL.
 
 Ejemplo de uso:
+- Column
 ```python
-from crud_constructor import Table, Column, RelationalColumn
+from crud_constructor import Table, Column
 from ..enums.column_types import ColumnTypes
 
 # Definir columnas para la tabla
-column1 = Column(name="id", type=ColumnTypes.INT, primary_key=True)
-column2 = Column(name="name", type=ColumnTypes.VARCHAR, default="'Unknown'")
-relational_column = RelationalColumn(column=column1, name="user_id", on_delete="CASCADE")
+id_column = Column(name="id", type=ColumnTypes.INT, primary_key=True)
+name_column = Column(name="name", type=ColumnTypes.VARCHAR, default="'Unknown'")
 
 # Crear la tabla
-users_table = Table(name="users", columns=[column1, column2, relational_column])
+users_table = Table(name="users", columns=[id_column, name_column])
 ```
+- Relational Column
+```python
+from crud_constructor import RelationalColumn
+
+# Creacion de las columnas...
+
+# Relacion de user_id
+user_id = RelationalColumn(column=id_column, name="user_id", table_ref="users", on_delete="CASCADE")
+
+orders_table = Table(name="orders", columns=[..., user_id])
+```
+
 
 ### `Column` y `RelationalColumn`
 Estas clases definen columnas simples y columnas relacionales, respectivamente. Puedes crear columnas con diferentes tipos de datos y especificar restricciones como claves primarias, valores predeterminados y claves foráneas.
