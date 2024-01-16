@@ -27,26 +27,61 @@ La clase `Table` representa una tabla en la base de datos y define sus columnas.
 Ejemplo de uso:
 - Column
 ```python
-from crud_constructor import Table, Column
-from ..enums.column_types import ColumnTypes
+from crud_constructor import Table, Column, ColumnTypes
 
-# Definir columnas para la tabla
-id_column = Column(name="id", type=ColumnTypes.INT, primary_key=True)
-name_column = Column(name="name", type=ColumnTypes.VARCHAR, default="'Unknown'")
+# Definir columnas relacionales
+user_id_col = Column(
+    name='id',
+    default='UUID_TO_BIN(UUID())',
+    type=ColumnTypes.BINARY,
+    length=16,
+    primary_key=True
+)
 
 # Crear la tabla
-users_table = Table(name="users", columns=[id_column, name_column])
+users_table = Table(
+    name='users',
+    columns=[
+        user_id_col,
+        Column(
+            name='name',
+            type=ColumnTypes.VARCHAR,
+            length=255
+        ),
+        Column(
+            name='email',
+            type=ColumnTypes.VARCHAR,
+            length=255
+        )
+    ]
+)
 ```
 - Relational Column
 ```python
 from crud_constructor import RelationalColumn
 
-# Creacion de las columnas...
-
-# Relacion de user_id
-user_id = RelationalColumn(column=id_column, name="user_id", table_ref="users", on_delete="CASCADE")
-
-orders_table = Table(name="orders", columns=[..., user_id])
+# Relacion de columnas
+orders_table = Table(
+    name='orders',
+    columns=[
+        Column(
+            name='id',
+            type=ColumnTypes.INTEGER,
+            auto_increment=True,
+            primary_key=True
+        ),
+        RelationalColumn(
+            column=user_id_col,
+            name='user_id',
+            table_ref='users'
+        ),
+        Column(
+            name='price',
+            type=ColumnTypes.DECIMAL,
+            length='10,2'
+        )
+    ]
+)
 ```
 
 

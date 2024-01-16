@@ -14,3 +14,4 @@ class ColumnTypes(Enum):
     TIMESTAMP = 'TIMESTAMP'
     JSON = 'JSON'
     VARCHAR = 'VARCHAR'
+    BINARY = 'BINARY'

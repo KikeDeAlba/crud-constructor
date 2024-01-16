@@ -6,21 +6,31 @@ class Column:
         name: str,
         type: ColumnTypes,
         default: str | None = None,
-        primary_key=False
+        primary_key=False,
+        length: int | str | None = None,
+        auto_increment: bool = False
     ):
         self.name = name
         self.type = type
         self.primary_key = primary_key
         self.default = default
+        self.length = length
+        self.auto_increment = auto_increment
 
     def create_column_query(self) -> str:
-        return f'{self.name} {self.type.value} {self.__primary_key__()} {self.__default__()}'
+        return f'{self.name} {self.type.value}{self.__length__()} {self.__primary_key__()} {self.__auto_increment__()} {self.__default__()}'
 
     def __primary_key__(self) -> str:
         return 'PRIMARY KEY' if self.primary_key else ''
     
+    def __length__(self) -> str:
+        return f'({self.length})' if self.length else ''
+    
     def __default__(self) -> str:
         return f'DEFAULT {self.default}' if self.default else ''
+    
+    def __auto_increment__(self) -> str:
+        return 'AUTO_INCREMENT' if self.auto_increment else ''
     
 class RelationalColumn:
     def __init__(
@@ -31,8 +41,7 @@ class RelationalColumn:
         on_delete: str | None = None,
         on_update: str | None = None,
         primary_key=False,
-        default: str | None = None
-
+        default: str | None = None,
     ) -> None:
         self.column = column
         self.name = name
@@ -41,9 +50,10 @@ class RelationalColumn:
         self.primary_key = primary_key
         self.default = default
         self.table_ref = table_ref
+        self.auto_increment = False
 
     def create_column_query(self) -> str:
-        return f'{self.name} {self.column.type.value} {self.__primary_key__()} {self.__default__()}'
+        return f'{self.name} {self.column.type.value}{self.__length__()} {self.__primary_key__()} {self.__default__()}'
 
     def __primary_key__(self) -> str:
         return 'PRIMARY KEY' if self.primary_key else ''
@@ -59,6 +69,9 @@ class RelationalColumn:
     
     def __on_update__(self) -> str:
         return f'ON UPDATE {self.on_update}' if self.on_update else ''
+    
+    def __length__(self) -> str:
+        return f'({self.column.length})' if self.column.length else ''
 
     def create_foreign_key_query(self) -> str:
         return self.__foreign_key__()
