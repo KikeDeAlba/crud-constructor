@@ -1,32 +1,32 @@
 from ..crud_constructor import Crud, Table, ColumnTypes, Column, RelationalColumn
 from mysqlclientpy import DB
 
-user_id_col = Column(
-    name='id',
-    default='UUID_TO_BIN(UUID())',
-    type=ColumnTypes.BINARY,
-    length=16,
-    primary_key=True
-)
-
-users = Table(
+users_table = Table(
     name='users',
     columns=[
-        user_id_col,
+        Column(
+            name='id',
+            default='UUID_TO_BIN(UUID())',
+            type=ColumnTypes.BINARY,
+            length=16,
+            primary_key=True
+        ),
         Column(
             name='name',
             type=ColumnTypes.VARCHAR,
-            length=255
         ),
         Column(
             name='email',
             type=ColumnTypes.VARCHAR,
-            length=255
+        ),
+        Column(
+            name='password',
+            type=ColumnTypes.VARCHAR
         )
     ]
 )
 
-orders = Table(
+orders_table = Table(
     name='orders',
     columns=[
         Column(
@@ -36,9 +36,8 @@ orders = Table(
             primary_key=True
         ),
         RelationalColumn(
-            column=user_id_col,
-            name='user_id',
-            table_ref='users'
+            column=users_table.get_column('id'),
+            name='user_id'
         ),
         Column(
             name='price',
@@ -49,7 +48,7 @@ orders = Table(
 )
 
 crud = Crud(
-    tables=[users],
+    tables=[users_table],
     client_sql=DB(
         host='localhost',
         database='test',
