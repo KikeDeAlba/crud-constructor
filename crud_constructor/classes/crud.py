@@ -3,6 +3,7 @@ from mysqlclientpy import DB
 from dotenv import load_dotenv
 from mysqlclientpy import DB
 import os
+load_dotenv()
 
 class Crud:
     def __init__(
