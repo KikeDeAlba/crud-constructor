@@ -1,5 +1,4 @@
 from ..crud_constructor import Crud, Table, ColumnTypes, Column, RelationalColumn
-from mysqlclientpy import DB
 
 users_table = Table(
     name='users',
@@ -18,10 +17,6 @@ users_table = Table(
         Column(
             name='email',
             type=ColumnTypes.VARCHAR,
-        ),
-        Column(
-            name='password',
-            type=ColumnTypes.VARCHAR
         )
     ]
 )
@@ -49,11 +44,9 @@ orders_table = Table(
 
 crud = Crud(
     tables=[users_table],
-    client_sql=DB(
-        host='localhost',
-        database='test',
-        password='password',
-        port=3306,
-        user='root'
-    )
+    host='localhost',
+    database='test',
+    password='password',
+    port=3306,
+    user='root'
 )

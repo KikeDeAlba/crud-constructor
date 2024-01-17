@@ -1,4 +1,9 @@
+annotated-types==0.6.0
 mysql-connector-python==8.3.0
 mysqlclientpy==1.1
 protobuf==4.25.2
+pydantic==2.5.3
+pydantic_core==2.14.6
+python-dotenv==1.0.0
 setuptools==69.0.3
+typing_extensions==4.9.0

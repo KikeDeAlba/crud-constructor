@@ -1,14 +1,37 @@
 from .table import Table
 from mysqlclientpy import DB
+from dotenv import load_dotenv
+from mysqlclientpy import DB
+import os
 
 class Crud:
     def __init__(
         self,
         tables: list[Table],
-        client_sql: DB
+        host: str | None = None,
+        database: str | None = None,
+        password: str | None = None,
+        port: int | str | None = None,
+        user: str | None = None
     ) -> None:
         self.tables = tables
-        self.client_sql = client_sql
+
+        host = host or os.environ.get('DB_HOST')
+        database = database or os.environ.get('DB_DATABASE')
+        password = password or os.environ.get('DB_PASSWORD')
+        port = port or os.environ.get('DB_PORT') or 3306
+        user = user or os.environ.get('DB_USER')
+
+        if not host or not database or not password or not port or not user:
+            raise Exception('You must provide the database connection parameters')
+
+        self.client_sql = DB(
+            host=host,
+            database=database,
+            password=password,
+            port=int(port),
+            user=user
+        )
 
         for table in self.tables:
             table.__set_client_sql__(self.client_sql)
