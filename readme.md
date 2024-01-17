@@ -103,6 +103,15 @@ Estas clases definen columnas simples y columnas relacionales, respectivamente. 
 
 ## Notas
 - Este proyecto está en desarrollo y se agregarán nuevas características.
-- La generación de HTML para el CRUD es una característica planificada (ver `__html__` en `Crud`).
+
+## Pendientes
+- [ ] Interfaz de usuario
+- [ ] Validaciones de tipos
+- [ ] Manejo de errores
+- [ ] Test unitarios
+- [ ] Editar registros
+- [ ] Añadir registros
+- [ ] Borrar registros
+- [ ] Manejo avanzado del tipado
 
 ¡Gracias por usar `crud-constructor`! Si encuentras algún problema o tienes sugerencias, no dudes en abrir un issue en el repositorio. ¡Contribuciones son bienvenidas!
